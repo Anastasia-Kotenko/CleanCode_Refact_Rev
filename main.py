@@ -2,33 +2,29 @@ import pygame
 from pygame.constants import QUIT, K_DOWN, K_UP, K_LEFT, K_RIGHT
 import random
 from os import listdir
+#code revue)
 
 pygame.init()
 
-FPS = pygame.time.Clock()
+# FPS = pygame.time.Clock()
 
 screen = width, height = 800, 600
 
-BLACK =0,0,0
-WHITE = 255, 255, 255
-RED = 255,0,0
-GREEN = 0, 255, 0
-BLUE = 0, 0, 255
 
 font = pygame.font.SysFont('Verdana', 20)
 
 main_surface = pygame.display.set_mode(screen)
 
-IMGS_PATH = 'goose'
+
 # player = pygame.Surface((30,30))
 # player.fill((255,255,255))
 
-player_imgs = [pygame.image.load(IMGS_PATH + '/' + file).convert_alpha() for file in listdir(IMGS_PATH)]
+player_imgs = [pygame.image.load('goose' + '/' + file).convert_alpha() for file in listdir('goose')]
 player= player_imgs[0]
 player_rect = player.get_rect()
 player_speed = 5
-CHANGE_IMG = pygame.USEREVENT + 3
-pygame.time.set_timer(CHANGE_IMG, 125)
+
+pygame.time.set_timer(pygame.USEREVENT + 3, 125)
 def create_enemy():
     # enemy = pygame.Surface((20, 20))
     # enemy.fill(RED)
@@ -36,8 +32,8 @@ def create_enemy():
     enemy_rect = pygame.Rect(width - 15, random.randint(0,height - 30), *enemy.get_size())
     enemy_speed = random.randint(2, 5)
     return [enemy, enemy_rect, enemy_speed]
-CREATE_ENEMY = pygame.USEREVENT + 1
-pygame.time.set_timer(CREATE_ENEMY, 1500)
+
+pygame.time.set_timer(pygame.USEREVENT + 1, 1500) #
 
 def create_bonus():
     # bonus = pygame.Surface((20, 20))
@@ -46,8 +42,7 @@ def create_bonus():
     bonus_rect = pygame.Rect(random.randint(0, width),-bonus.get_height(), *bonus.get_size())
     bonus_speed = random.randint(2, 5)
     return [bonus, bonus_rect, bonus_speed]
-CREATE_BONUS = pygame.USEREVENT + 2
-pygame.time.set_timer(CREATE_BONUS, 1500)
+pygame.time.set_timer(pygame.USEREVENT + 2, 1500)
 
 bg = pygame.transform.scale(pygame.image.load('background.png').convert(), screen)
 bgX = 0
@@ -56,7 +51,7 @@ bg_speed = 3
 
 img_index = 0
 scores = 0
-
+#
 enemies = []
 bonuses = []
 
@@ -64,18 +59,18 @@ is_working = True
 
 while is_working:
 
-    FPS.tick(60)
+    pygame.time.Clock().tick(60)
 
     for event in pygame.event.get():
         if event.type == QUIT:
-            is_working=False
+            is_working=False#
 
-        if event.type == CREATE_ENEMY:
-            enemies.append(create_enemy())
-        if event.type == CREATE_BONUS:
+        if event.type == pygame.USEREVENT + 1:
+            enemies.append(create_enemy())#
+        if event.type == pygame.USEREVENT + 2:
             bonuses.append(create_bonus())
 
-        if event.type == CHANGE_IMG:
+        if event.type == pygame.USEREVENT + 3:
             img_index += 1
             if img_index == len(player_imgs):
                 img_index = 0
@@ -89,7 +84,7 @@ while is_working:
     bgX -= bg_speed
     bgX2 -= bg_speed
 
-    if bgX < -bg.get_width():
+    if bgX < -bg.get_width():#
         bgX = bg.get_width()
     if bgX2 < -bg.get_width():
         bgX2 = bg.get_width()
@@ -99,7 +94,7 @@ while is_working:
 
     main_surface.blit(player, player_rect)
 
-    main_surface.blit(font.render(str(scores),True, BLACK), (width - 30, 0))
+    main_surface.blit(font.render(str(scores),True, 0,0,0), (width - 30, 0))
 
 
     for enemy in enemies:
